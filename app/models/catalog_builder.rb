@@ -108,6 +108,7 @@ class CatalogBuilder
 
     puts "****** FULL BUILD OF CATALOG OF #{Audiobook.all.size.to_s} AUDIOBOOKS COMPLETED IN #{build_timer.how_long?} " +
         "****** #{self.current_time}"
+    return :successful_build
   end
 
   def self.scrape_webpages

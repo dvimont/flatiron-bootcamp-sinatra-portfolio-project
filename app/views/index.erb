@@ -1,2 +1,16 @@
 <h2>Welcome to Librivox Explorer WEB</h2>
-<h3>Please make your browsing selections and click the EXPLORE button!</h3>
+<h3>Select your browsing option below to begin exploring the Librivox Catalog!</h3>
+<button class="accordion">AUTHORS</button>
+<div class="panel">
+<% ('A'..'Z').to_a.each{|initial| %>
+  <button class="accordion2"><%=initial%></button>
+  <div class="panel2">
+  <% @authors_hash.key_starts_with(initial).each{|kv_pair| %>
+    <button class="accordion3"><%= kv_pair[1].to_s %></button>
+    <div class="panel3">
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+  <% } %>
+  </div>
+<% } %>
+</div>

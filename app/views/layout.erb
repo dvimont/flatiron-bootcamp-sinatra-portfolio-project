@@ -5,15 +5,80 @@
     h1 { display:inline-block; text-align: center; background-color: white; }
     .centered { margin: auto; width: 50%; text-align: center; }
     .announce { text-align: center; border-style: dashed; border-width: 3px; border-color: red;}
+
+    button.accordion { background-color: #eee; color: #444; cursor: pointer; padding: 18px; width: 100%;
+        border: none; text-align: center; outline: none; font-size: 24px; transition: 0.4s; }
+    button.accordion.active, button.accordion:hover { background-color: #ddd; }
+    div.panel { padding: 0 18px; background-color: white; max-height: 0; overflow: hidden;
+        transition: max-height 0.2s ease-out; }
+    button.accordion2 { background-color: #eee; color: #444; cursor: pointer; padding: 14px; width: 90%;
+        border: none; text-align: left; outline: none; font-size: 14px; transition: 0.4s; }
+    button.accordion2.active, button.accordion2:hover { background-color: #ddd; }
+    div.panel2 { padding: 0 24px; background-color: white; max-height: 0; overflow: hidden;
+        transition: max-height 0.2s ease-out; }
+    button.accordion3 { background-color: #eee; color: #444; cursor: pointer; padding: 10px; width: 80%;
+        border: none; text-align: left; outline: none; font-size: 12px; transition: 0.4s; }
+    button.accordion3.active, button.accordion3:hover { background-color: #ddd; }
+    div.panel3 { padding: 0 30px; background-color: white; max-height: 0; overflow: hidden;
+        transition: max-height 0.2s ease-out; }
+
    </style>
   <head>
-    <title>Fwitter</title>
+    <title>Librivox Explorer</title>
   </head>
   <body>
-    <div class='centered'><h1>Commonvox presents: LIBRIVOX EXPLORER</h1></div>
+    <div class='centered'><h1>CommonVox presents: LIBRIVOX EXPLORER</h1></div>
     <!-- < |% if flash.has?(:message) %| >
       <h2 class='announce'>< |%= flash[:message] %| ></h2>
     < |% end %| > -->
     <%= yield %>
+    <script>
+      var acc = document.getElementsByClassName("accordion");
+      var i;
+
+      for (i = 0; i < acc.length; i++) {
+        acc[i].onclick = function() {
+          this.classList.toggle("active");
+          var panel = this.nextElementSibling;
+          if (panel.style.maxHeight){
+            panel.style.maxHeight = null;
+          } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+          }
+        }
+      }
+    </script>
+    <script>
+      var acc = document.getElementsByClassName("accordion2");
+      var i;
+
+      for (i = 0; i < acc.length; i++) {
+        acc[i].onclick = function() {
+          this.classList.toggle("active");
+          var panel2 = this.nextElementSibling;
+          if (panel2.style.maxHeight){
+            panel2.style.maxHeight = null;
+          } else {
+            panel2.style.maxHeight = panel2.scrollHeight + "px";
+          }
+        }
+      }
+    </script>
+    <script>
+      var acc = document.getElementsByClassName("accordion3");
+      var i;
+
+      for (i = 0; i < acc.length; i++) {
+        acc[i].onclick = function() {
+          this.classList.toggle("active");
+          var panel3 = this.nextElementSibling;
+          if (panel3.style.maxHeight){
+            panel3.style.maxHeight = null;
+          } else {
+            panel3.style.maxHeight = panel3.scrollHeight + "px";
+          }
+        }
+      }
+    </script>
   </body>
 </html>
