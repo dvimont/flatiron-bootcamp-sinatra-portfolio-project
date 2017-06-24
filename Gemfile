@@ -8,6 +8,8 @@ gem 'shotgun'
 gem 'pry'
 gem 'tux'
 # gem 'rack-flash3'
+gem 'rubyzip'
+gem 'minitar'
 
 group :test do
   gem 'rspec'
