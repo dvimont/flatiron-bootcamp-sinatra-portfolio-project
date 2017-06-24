@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require_relative '../config/environment'
+
+# append new audiobook webpages to local directory
+CatalogBuilder.build(12000, :remote_api_calls)
