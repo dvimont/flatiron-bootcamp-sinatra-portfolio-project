@@ -6,3 +6,5 @@ This project is produced in partial fulfillment of the requirements of the final
 It pointedly goes beyond the requirements for the web-based front end, in that it utilizes more extensive HTML5 and CSS tools than stipulated by the project requirements.
 
 However, it pointedly does NOT fulfill the requirements for usage of a SQL-based datastore managed by ActiveRecord, since my choice of project builds upon [my previous CLI front-ended project for scraping and presenting Librivox.org and Gutenberg.org data](https://github.com/dvimont/flatiron-bootcamp--project-based-assessment-1--ruby--scraper-indexer-w-CLI-frontend). That infrastructure directly loads its OO models from the locally stored HTML (copies of Librivox.org webpages, and a tar file provided by Gutenberg.org), and has no need for RDBMS storage/retrieval.
+
+When the project is finalized, it is intended that it a live version of it will be hosted on [Heroku](https://devcenter.heroku.com/).
