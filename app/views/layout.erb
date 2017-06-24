@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <style>
+    body {background-color: aquamarine;}
+    h1 { display:inline-block; text-align: center; background-color: white; }
+    .centered { margin: auto; width: 50%; text-align: center; }
+    .announce { text-align: center; border-style: dashed; border-width: 3px; border-color: red;}
+   </style>
+  <head>
+    <title>Fwitter</title>
+  </head>
+  <body>
+    <div class='centered'><h1>Commonvox presents: LIBRIVOX EXPLORER on the Web</h1></div>
+    <% if flash.has?(:message) %>
+      <h2 class='announce'><%= flash[:message] %></h2>
+    <% end %>
+    <%= yield %>
+  </body>
+</html>
