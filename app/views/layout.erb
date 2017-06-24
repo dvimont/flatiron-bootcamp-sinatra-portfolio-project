@@ -10,10 +10,10 @@
     <title>Fwitter</title>
   </head>
   <body>
-    <div class='centered'><h1>Commonvox presents: LIBRIVOX EXPLORER on the Web</h1></div>
-    <% if flash.has?(:message) %>
-      <h2 class='announce'><%= flash[:message] %></h2>
-    <% end %>
+    <div class='centered'><h1>Commonvox presents: LIBRIVOX EXPLORER</h1></div>
+    <!-- < |% if flash.has?(:message) %| >
+      <h2 class='announce'>< |%= flash[:message] %| ></h2>
+    < |% end %| > -->
     <%= yield %>
   </body>
 </html>
