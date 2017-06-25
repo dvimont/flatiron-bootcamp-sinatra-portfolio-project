@@ -21,64 +21,39 @@
     button.accordion3.active, button.accordion3:hover { background-color: #ddd; }
     div.panel3 { padding: 0 30px; background-color: white; max-height: 0; overflow: hidden;
         transition: max-height 0.2s ease-out; }
-
    </style>
   <head>
     <title>Librivox Explorer</title>
   </head>
   <body>
-    <div class='centered'><h1>CommonVox presents: LIBRIVOX EXPLORER</h1></div>
-    <!-- < |% if flash.has?(:message) %| >
-      <h2 class='announce'>< |%= flash[:message] %| ></h2>
-    < |% end %| > -->
+    <header>
+      <div class='centered'>
+        <h1>CommonVox presents: LIBRIVOX EXPLORER</h1>
+      </div>
+    </header>
     <%= yield %>
     <script>
-      var acc = document.getElementsByClassName("accordion");
-      var i;
+      toggleAccordion(document.getElementsByClassName("accordion"));
+      toggleAccordion(document.getElementsByClassName("accordion2"));
+      toggleAccordion(document.getElementsByClassName("accordion3"));
 
-      for (i = 0; i < acc.length; i++) {
-        acc[i].onclick = function() {
-          this.classList.toggle("active");
-          var panel = this.nextElementSibling;
-          if (panel.style.maxHeight){
-            panel.style.maxHeight = null;
-          } else {
-            panel.style.maxHeight = panel.scrollHeight + "px";
+      function toggleAccordion(acc) {
+        var i;
+        for (i = 0; i < acc.length; i++) {
+          acc[i].onclick = function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight){
+              panel.style.maxHeight = null;
+            } else {
+              panel.style.maxHeight = "none";
+            }
           }
         }
       }
     </script>
-    <script>
-      var acc = document.getElementsByClassName("accordion2");
-      var i;
-
-      for (i = 0; i < acc.length; i++) {
-        acc[i].onclick = function() {
-          this.classList.toggle("active");
-          var panel2 = this.nextElementSibling;
-          if (panel2.style.maxHeight){
-            panel2.style.maxHeight = null;
-          } else {
-            panel2.style.maxHeight = panel2.scrollHeight + "px";
-          }
-        }
-      }
-    </script>
-    <script>
-      var acc = document.getElementsByClassName("accordion3");
-      var i;
-
-      for (i = 0; i < acc.length; i++) {
-        acc[i].onclick = function() {
-          this.classList.toggle("active");
-          var panel3 = this.nextElementSibling;
-          if (panel3.style.maxHeight){
-            panel3.style.maxHeight = null;
-          } else {
-            panel3.style.maxHeight = panel3.scrollHeight + "px";
-          }
-        }
-      }
-    </script>
+    <footer>
+      <p>Footer content here!</p>
+    </footer>
   </body>
 </html>

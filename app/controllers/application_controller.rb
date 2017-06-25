@@ -2,7 +2,7 @@ require './config/environment'
 
 class ApplicationController < Sinatra::Base
   # use Rack::Flash
-  CATALOG_BUILD_RESPONSE = CatalogBuilder.build(50)
+  CATALOG_BUILD_RESPONSE = CatalogBuilder.build # (525)
 
   configure do
     set :public_folder, 'public'
