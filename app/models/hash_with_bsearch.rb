@@ -57,8 +57,8 @@ class HashWithBsearch
   # Intended to provide O(log n) efficiency when searching for an ordered
   #  subset of items that match the submitted <key_prefix> argument.
   # EXAMPLE: authors_keyed_by_name.key_starts_with("M") would return an array
-  #          of key-value pairs for all authors whose name begins with "M".
-  def key_starts_with(key_prefix)
+  #          of values for all authors whose key begins with "M".
+  def values_with_key_prefix(key_prefix)
     start_index = @sorted_key_value_array.bsearch_index{ |kv_pair|
                     kv_pair[0][0,key_prefix.length] >= key_prefix }
     return []  if start_index.nil?
@@ -72,7 +72,23 @@ class HashWithBsearch
     end
 
     return []  if end_index < start_index # i.e. if key_prefix not found!
-    return @sorted_key_value_array[start_index..end_index]
+    return @sorted_key_value_array[start_index..end_index].collect{|kv_pair| kv_pair[1]}
+  end
+
+  def values_with_nonroman_key()
+    non_roman_array = Array.new
+
+    first_A_index = @sorted_key_value_array.bsearch_index{|kv_pair| kv_pair[0][0] >= 'A' }
+    first_past_z_index = @sorted_key_value_array.bsearch_index{|kv_pair| kv_pair[0][0] > 'z' }
+    if !first_A_index.nil? && first_A_index > 0
+      non_roman_array = @sorted_key_value_array[0..(first_A_index - 1)]
+    end
+    if !first_past_z_index.nil?
+      non_roman_array.concat(
+          @sorted_key_value_array[first_past_z_index..(@sorted_key_value_array.size - 1)])
+    end
+
+    return non_roman_array.collect{|kv_pair| kv_pair[1]}
   end
 
   def keys

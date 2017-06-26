@@ -60,7 +60,11 @@ class Contributor
     if self.first_name.nil?
       name_key = self.last_name
     else
-      if self.last_name.to_s == "VERSION" || self.last_name.to_s == "VULGATA"
+      last_name_upcase = self.last_name.to_s.upcase
+      ## NOTE: It is possible that more last_name_upcase comparisons will need to be added here.
+      if last_name_upcase == "VERSION" || last_name_upcase == "VULGATA" ||
+          last_name_upcase == "COMPANY" || last_name_upcase == "CONGRESS" ||
+          ('0'..'9').include?(self.last_name.to_s[0])
         name_key = self.first_name.to_s + " " + self.last_name.to_s
       else
         name_key = self.last_name.to_s +

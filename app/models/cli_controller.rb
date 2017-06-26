@@ -81,18 +81,18 @@ class CliController
   end
 
   def browse_by_category_subset(category_type, name_prefix)
-    category_kv_pairs = category_type.all_by_name.key_starts_with(name_prefix.upcase)
-    if category_kv_pairs.size == 0
+    category_array = category_type.all_by_name.values_with_key_prefix(name_prefix.upcase)
+    if category_array.size == 0
       puts "   No #{category_type.to_s}s found with surname prefix of '#{name_prefix}'.\n".red +
            "     Press ENTER to return to menu...".red
       gets
       return
     end
     counter = 0
-    category_kv_pairs.each {|kv_pair|
+    category_array.each {|category_object|
       counter += 1
-      puts "   #{counter.to_s}: #{kv_pair[1].to_s}"
-      if counter == category_kv_pairs.size
+      puts "   #{counter.to_s}: #{category_object.to_s}"
+      if counter == category_array.size
         puts "END of current list. Enter number to list #{category_type.to_s}'s audiobooks; " +
                 "ENTER to return to menu."
         print CliController::PROMPT; input = gets.strip
@@ -101,15 +101,15 @@ class CliController
                     "ENTER to continue scrolling; 0 to return to menu."
         print CliController::MORE_PROMPT; input = gets.strip
       end
-      return if input == "0" || list_audiobooks(input, category_kv_pairs)
+      return if input == "0" || list_audiobooks(input, category_array)
     }
   end
 
-  def list_audiobooks(input, kv_pair_array)
+  def list_audiobooks(input, category_array)
     selected_item_number = input.to_i
     return false if selected_item_number.to_s != input # i.e. if input was not numeric!
-    return false if !selected_item_number.between?(1, kv_pair_array.size)
-    category_object = kv_pair_array[selected_item_number - 1][1]
+    return false if !selected_item_number.between?(1, category_array.size)
+    category_object = category_array[selected_item_number - 1]
     list_size = category_object.audiobooks_by_title.size
     puts ""
     puts "   Audiobooks (by title) belonging to #{category_object.class.to_s}: #{category_object.to_s.green}" +

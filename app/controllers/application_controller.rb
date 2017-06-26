@@ -2,7 +2,7 @@ require './config/environment'
 
 class ApplicationController < Sinatra::Base
   # use Rack::Flash
-  CATALOG_BUILD_RESPONSE = CatalogBuilder.build(50)
+  CATALOG_BUILD_RESPONSE = CatalogBuilder.build(525)
 
   configure do
     set :public_folder, 'public'
@@ -18,6 +18,12 @@ class ApplicationController < Sinatra::Base
   get '/' do
     @authors_hash = Author.all_by_name
     @readers_hash = Reader.all_by_name
+
+  #  puts "AUTHORS outside of roman alphabet:"
+  #  @authors_hash.values_with_nonroman_key.each {|author| puts author.to_s}
+  #  puts "READERS outside of roman alphabet:"
+  #  @readers_hash.values_with_nonroman_key.each {|reader| puts reader.to_s}
+
     @librivox_genres_hash = GenreLibrivox.all_by_name
     @gutenberg_genres_hash = GenreGutenberg.all_by_name
     @languages_hash = Language.all_by_name
