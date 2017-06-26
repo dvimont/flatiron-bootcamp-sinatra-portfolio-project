@@ -10,18 +10,14 @@ class ApplicationController < Sinatra::Base
     # set :session_secret, "sooper-dooper-secret-930022"
   end
 
-  @@authors_hash = nil
+  @@accordion_hashes = nil
+  @@accordion_labels = ["AUTHOR", "READER", "LIBRIVOX GENRE", "GUTENBERG GENRE", "LANGUAGE"]
+  @@accordion_classes = [Author, Reader, GenreLibrivox, GenreGutenberg, Language]
 
   get '/' do
-    if @@authors_hash.nil?
-      puts "authors hash class-level being initialized"
-      @@authors_hash = Author.all_by_name
-    end
-    @authors_hash = @@authors_hash
-    @readers_hash = Reader.all_by_name
-    @librivox_genres_hash = GenreLibrivox.all_by_name
-    @gutenberg_genres_hash = GenreGutenberg.all_by_name
-    @languages_hash = Language.all_by_name
+    ApplicationController.setup_class_variables
+    @accordion_hashes = @@accordion_hashes
+    @accordion_labels = @@accordion_labels
     erb :index
   end
 
@@ -29,4 +25,29 @@ class ApplicationController < Sinatra::Base
     puts 'selection submitted'
     redirect to '/'
   end
+
+  def self.setup_class_variables
+    return if !@@accordion_hashes.nil?
+
+    # @@authors_hash = Author.all_by_name
+
+    @@accordion_hashes = Array.new
+    @@accordion_classes.each{ |category_subclass|
+      accordion_hash = Hash.new
+      ('A'..'[').to_a.each{ |letter|
+        if letter == '['
+          category_object_array = category_subclass.all_by_name.values_with_nonroman_key
+          letter_label = "NAMES NOT IN ROMAN ALPHABET"
+        else
+          category_object_array = category_subclass.all_by_name.values_with_key_prefix(letter)
+          letter_label = letter
+        end
+        if (!category_object_array.nil? && category_object_array.size > 0)
+          accordion_hash[letter_label] = category_object_array
+        end
+      }
+      @@accordion_hashes.push(accordion_hash)
+    }
+  end
+
 end
