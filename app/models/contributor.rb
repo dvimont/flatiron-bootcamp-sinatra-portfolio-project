@@ -71,7 +71,7 @@ class Contributor
                     ("_" * (30 - self.last_name.length)) + self.first_name.to_s
       end
     end
-    self.class.all_by_name[name_key.upcase] = self  if !name_key.nil?
+    self.class.all_by_name[convert_alt_chars_to_base(name_key.upcase)] = self  if !name_key.nil?
   end
 
   def to_s()
@@ -83,5 +83,14 @@ class Contributor
       returned_string += " (#{self.birth_year}-#{self.death_year})"
     end
     return returned_string
+  end
+
+  # The following derived from https://grosser.it/2009/03/07/umlaut-aware-alphabetical-sorting/
+  # NOTE: this is not a comprehensive set of all possible "alternate versions" of capital letters.
+  def convert_alt_chars_to_base(capitalized_text)
+    %w[ǍĄĂĀÆÅÄÃÂÀÁÄA ŒŐŎŌØÓÕÔÒÓÖO İĮĬĪĨǏÏÎÌÍI ŲŰŮŬŪŨÜÛÙÚÜU ĚĘĖĔĒËÊÈÉE ṠȘŠŞŜŚßS ƇČĊĈĆÇC ĐĎD ŇŅŃÑN ŻZ].each { |set|
+      capitalized_text.gsub!(/[#{set[0..-2]}]/,set[-1..-1])
+    }
+    return capitalized_text
   end
 end
