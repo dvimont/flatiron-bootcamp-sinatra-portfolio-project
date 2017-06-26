@@ -1,5 +1,9 @@
 module Category
   module ClassMethods
+    # NOTE: CHAR_CONVERSION_ARRAY is not a comprehensive set of all possible "alternate versions" of capital letters.
+    CHAR_CONVERSION_ARRAY =
+      %w[ǍĄĂĀÆÅÄÃÂÀÁÄA ŒŐŎŌØÓÕÔÒÓÖO İĮĬĪĨǏÏÎÌÍI ŲŰŮŬŪŨÜÛÙÚÜU ĚĘĖĔĒËÊÈÉE ṠȘŠŞŜŚßS ƇČĊĈĆÇC ĐĎD ŇŅŃÑN ŻZ]
+
     def self.extended(base) # fires at start-up (during Class-level instantiation)
       base.class_variable_set(:@@all, HashWithBsearch.new)
     end
@@ -24,6 +28,13 @@ module Category
       return self.all[id]
     end
 
+    # The following derived from https://grosser.it/2009/03/07/umlaut-aware-alphabetical-sorting/
+    def convert_alt_chars_to_base(capitalized_text)
+      CHAR_CONVERSION_ARRAY.each { |set|
+        capitalized_text.gsub!(/[#{set[0..-2]}]/,set[-1..-1])
+      }
+      return capitalized_text
+    end
   end
 
   module InstanceMethods

@@ -56,8 +56,8 @@ class HashWithBsearch
 
   # Intended to provide O(log n) efficiency when searching for an ordered
   #  subset of items that match the submitted <key_prefix> argument.
-  # EXAMPLE: authors_keyed_by_name.key_starts_with("M") would return an array
-  #          of values for all authors whose key begins with "M".
+  # EXAMPLE: authors_keyed_by_name.values_with_key_prefix("M") would return an
+  #          array of values for all authors whose key begins with "M".
   def values_with_key_prefix(key_prefix)
     start_index = @sorted_key_value_array.bsearch_index{ |kv_pair|
                     kv_pair[0][0,key_prefix.length] >= key_prefix }
