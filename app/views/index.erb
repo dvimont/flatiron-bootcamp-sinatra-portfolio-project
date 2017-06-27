@@ -1,30 +1,27 @@
-<h2>Welcome to Librivox Explorer WEB</h2>
-<h3>Select a category below to begin exploring the Librivox Catalog!</h3>
-<% (0..(@accordion_hashes.size - 1)).each{ |i| %>
+<h2 class='centered'>Welcome to Librivox Explorer WEB</h2>
+<h3 class='centered'>Select a category below to begin exploring the Librivox Catalog!</h3><br><br>
+<% (0..(ACCORDION_HASHES.size - 1)).each{ |i| %>
   <% if (@selected_category_index == i) %>
-    <button class="accordion acc1"><%= @accordion_labels[i] %>S</button>
+    <button class="accordion acc1"><%= ACCORDION_LABELS[i] %>S</button>
     <div class="panel" style="max-height:none">
-    <% @accordion_hashes[i].each{|accordion_label, category_object_array| %>
+    <% ACCORDION_HASHES[i].each{|accordion_label, category_object_array| %>
       <button class="accordion acc2"><span class="letter-label"><%=accordion_label%></span>
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              [<%= category_object_array.size %> <%= @accordion_labels[i].downcase %>s]</span>
+              [<%= category_object_array.size %> <%= ACCORDION_LABELS[i].downcase %>s]</span>
       </button>
-      <div class="panel">
+      <div class="panel" >
       <% category_object_array.each{|category_object| %>
-        <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
-        <div class="panel">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris nisi ut aliquip ex ea commodo consequat.</p>
-        </div>
+        <form method="post" action="/audiobooks/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
+          <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
+        </form>
       <% } %>
       </div>
     <% } %>
     </div>
   <% else # all categories which are NOT selected are presented just as form/button! %>
     <form method="post" action="/select/<%= i %>">
-      <button class="accordion acc1"><%= @accordion_labels[i] %>S</button>
+      <button class="accordion acc1"><%= ACCORDION_LABELS[i] %>S</button>
     </form>
   <% end # end of 'if (@selected_index == i)'%>
 <% } %>

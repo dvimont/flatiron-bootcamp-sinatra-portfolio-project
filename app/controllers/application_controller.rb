@@ -10,29 +10,42 @@ class ApplicationController < Sinatra::Base
     # set :session_secret, "sooper-dooper-secret-930022"
   end
 
-  @@accordion_hashes = nil
-  @@accordion_labels = ["AUTHOR", "READER", "LIBRIVOX GENRE", "GUTENBERG GENRE", "LANGUAGE"]
-  @@accordion_classes = [Author, Reader, GenreLibrivox, GenreGutenberg, Language]
+  ACCORDION_LABELS = ["AUTHOR", "READER", "LIBRIVOX GENRE", "GUTENBERG GENRE", "LANGUAGE"]
+  ACCORDION_CLASSES = [Author, Reader, GenreLibrivox, GenreGutenberg, Language]
+  ACCORDION_HASHES = Array.new
+  DEFAULT_ERB = Array.new
+  PRELOADED_ERB_ARRAY = Array.new
 
   get '/' do
-    self.set_accordion_variables
-    erb :index
-  end
-
-  get '/category/:selected_category_index' do
-    self.set_accordion_variables
-    @selected_category_index = params[:selected_category_index].to_i
-    erb :index
+    self.set_preloaded_erb_array
+    return DEFAULT_ERB[0]
   end
 
   post '/select/:selected_category_index' do
     redirect to "/category/#{params[:selected_category_index]}"
   end
 
+  get '/category/:selected_category_index' do
+    self.set_preloaded_erb_array
+    return PRELOADED_ERB_ARRAY[params[:selected_category_index].to_i]
+  end
+
+  post '/audiobooks/:category_type/:object_id' do
+    redirect to "/audiobooks/#{params[:category_type]}/#{params[:object_id]}"
+  end
+
+  get '/audiobooks/:category_type/:object_id' do
+    category_class = ACCORDION_CLASSES.select{|klass|
+      params[:category_type] == klass.to_s.downcase
+    }.first
+    puts "category class" + category_class.to_s
+    @category_object = category_class.get(params[:object_id])
+    erb :category_instance_audiobooks
+  end
+
   def set_accordion_variables
-    if @@accordion_hashes.nil?
-      @@accordion_hashes = Array.new
-      @@accordion_classes.each{ |category_subclass|
+    if ACCORDION_HASHES.empty?
+      ACCORDION_CLASSES.each{ |category_subclass|
         accordion_hash = Hash.new
         ('A'..'[').to_a.each{ |letter|
           if letter == '['
@@ -46,10 +59,20 @@ class ApplicationController < Sinatra::Base
             accordion_hash[letter_label] = category_object_array
           end
         }
-        @@accordion_hashes.push(accordion_hash)
+        ACCORDION_HASHES.push(accordion_hash)
       }
     end
-    @accordion_hashes = @@accordion_hashes
-    @accordion_labels = @@accordion_labels
+  end
+
+  def set_preloaded_erb_array()
+    return if !PRELOADED_ERB_ARRAY.empty?
+
+    self.set_accordion_variables
+    DEFAULT_ERB[0] = erb :index
+
+    (0..(ACCORDION_CLASSES.size - 1)).each{ |i|
+      @selected_category_index = i
+      PRELOADED_ERB_ARRAY.push(erb :index)
+    }
   end
 end

@@ -3,7 +3,7 @@
   <style>
     body {background-color: aquamarine;}
     h1 { display:inline-block; text-align: center; background-color: white; }
-    .centered { margin: auto; width: 50%; text-align: center; }
+    .centered { margin: auto; width: 70%; text-align: center; }
     .announce { text-align: center; border-style: dashed; border-width: 3px; border-color: red;}
 
     button.accordion { background-color: #eee; color: #444; cursor: pointer; outline: none;
@@ -21,14 +21,13 @@
   </head>
   <body>
     <header>
-      <div class='centered'>
+      <span>
         <h1>CommonVox presents: LIBRIVOX EXPLORER</h1>
-      </div>
+      </span>
     </header>
     <%= yield %>
     <script>
       toggleAccordion(document.getElementsByClassName("accordion"));
-
       function toggleAccordion(acc) {
         var i;
         for (i = 0; i < acc.length; i++) {
@@ -38,14 +37,22 @@
             if (panel.style.maxHeight){
               panel.style.maxHeight = null;
             } else {
-              panel.style.maxHeight = "none";
+              panel.style.maxHeight = 'none';
             }
           }
         }
       }
     </script>
     <footer>
-      <p>Footer content here!</p>
+      <div class='centered'>
+        <br><hr/>
+        <span>
+          <h4>SOLO&nbsp;<img src='/images/solo.png' alt="Solo icon" title="Solo icon" height="18" width="18">
+            and GROUP&nbsp;<img src='/images/group.png' alt="Group icon" title="Group icon" height="18" width="18">
+            icons provided by <a href='http://www.freepik.com/' target='_blank'>Freepik</a>
+              from <a href='http://www.flaticon.com/' target='_blank'>www.flaticon.com</a></h4>
+        </span>
+      </div>
     </footer>
   </body>
 </html>

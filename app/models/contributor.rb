@@ -78,7 +78,7 @@ class Contributor
   def to_s()
     returned_string = ""
     returned_string += self.first_name + " "  if !self.first_name.nil?
-    returned_string += self.last_name
+    returned_string += self.last_name if !self.last_name.nil?
     if (!self.birth_year.nil? && !self.birth_year.empty?) ||
           (!self.death_year.nil? && !self.death_year.empty?)
       returned_string += " (#{self.birth_year}-#{self.death_year})"
