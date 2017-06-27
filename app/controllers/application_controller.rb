@@ -15,16 +15,12 @@ class ApplicationController < Sinatra::Base
   @@accordion_classes = [Author, Reader, GenreLibrivox, GenreGutenberg, Language]
 
   get '/' do
-    ApplicationController.set_accordion_variables
-    @accordion_hashes = @@accordion_hashes
-    @accordion_labels = @@accordion_labels
+    self.set_accordion_variables
     erb :index
   end
 
   get '/category/:selected_category_index' do
-    ApplicationController.set_accordion_variables
-    @accordion_hashes = @@accordion_hashes
-    @accordion_labels = @@accordion_labels
+    self.set_accordion_variables
     @selected_category_index = params[:selected_category_index].to_i
     erb :index
   end
@@ -33,25 +29,27 @@ class ApplicationController < Sinatra::Base
     redirect to "/category/#{params[:selected_category_index]}"
   end
 
-  def self.set_accordion_variables
-    return if !@@accordion_hashes.nil?
-
-    @@accordion_hashes = Array.new
-    @@accordion_classes.each{ |category_subclass|
-      accordion_hash = Hash.new
-      ('A'..'[').to_a.each{ |letter|
-        if letter == '['
-          category_object_array = category_subclass.all_by_name.values_with_nonroman_key
-          letter_label = "NAMES NOT IN ROMAN ALPHABET"
-        else
-          category_object_array = category_subclass.all_by_name.values_with_key_prefix(letter)
-          letter_label = letter
-        end
-        if (!category_object_array.nil? && category_object_array.size > 0)
-          accordion_hash[letter_label] = category_object_array
-        end
+  def set_accordion_variables
+    if @@accordion_hashes.nil?
+      @@accordion_hashes = Array.new
+      @@accordion_classes.each{ |category_subclass|
+        accordion_hash = Hash.new
+        ('A'..'[').to_a.each{ |letter|
+          if letter == '['
+            category_object_array = category_subclass.all_by_name.values_with_nonroman_key
+            letter_label = "NAMES NOT IN ROMAN ALPHABET"
+          else
+            category_object_array = category_subclass.all_by_name.values_with_key_prefix(letter)
+            letter_label = letter
+          end
+          if (!category_object_array.nil? && category_object_array.size > 0)
+            accordion_hash[letter_label] = category_object_array
+          end
+        }
+        @@accordion_hashes.push(accordion_hash)
       }
-      @@accordion_hashes.push(accordion_hash)
-    }
+    end
+    @accordion_hashes = @@accordion_hashes
+    @accordion_labels = @@accordion_labels
   end
 end
