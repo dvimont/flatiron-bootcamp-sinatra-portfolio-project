@@ -1,22 +1,30 @@
 <h2>Welcome to Librivox Explorer WEB</h2>
-<h3>Select your browsing option below to begin exploring the Librivox Catalog!</h3>
-<% (0..(@accordion_hashes.size - 1)).each{|i| %>
-  <button class="accordion acc1"><%= @accordion_labels[i] %>S</button>
-  <div class="panel">
-  <% @accordion_hashes[i].each{|accordion_label, category_object_array| %>
-    <button class="accordion acc2"><span style="font-size:140%; font-weight:bold;"><%=accordion_label%></span>
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<%= category_object_array.size %> <%= @accordion_labels[i].downcase %>s]</span></button>
-    <div class="panel">
-    <% category_object_array.each{|category_object| %>
-      <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
+<h3>Select a category below to begin exploring the Librivox Catalog!</h3>
+<% (0..(@accordion_hashes.size - 1)).each{ |i| %>
+  <% if (@selected_category_index == i) %>
+    <button class="accordion acc1"><%= @accordion_labels[i] %>S</button>
+    <div class="panel" style="max-height:none">
+    <% @accordion_hashes[i].each{|accordion_label, category_object_array| %>
+      <button class="accordion acc2"><span class="letter-label"><%=accordion_label%></span>
+          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              [<%= category_object_array.size %> <%= @accordion_labels[i].downcase %>s]</span>
+      </button>
       <div class="panel">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-          laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <% category_object_array.each{|category_object| %>
+        <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
+        <div class="panel">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+            laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </div>
+      <% } %>
       </div>
     <% } %>
     </div>
-  <% } %>
-  </div>
+  <% else # all categories which are NOT selected are presented just as form/button! %>
+    <form method="post" action="/select/<%= i %>">
+      <button class="accordion acc1"><%= @accordion_labels[i] %>S</button>
+    </form>
+  <% end # end of 'if (@selected_index == i)'%>
 <% } %>

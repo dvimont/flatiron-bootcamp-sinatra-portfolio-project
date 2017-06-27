@@ -15,21 +15,26 @@ class ApplicationController < Sinatra::Base
   @@accordion_classes = [Author, Reader, GenreLibrivox, GenreGutenberg, Language]
 
   get '/' do
-    ApplicationController.setup_class_variables
+    ApplicationController.set_accordion_variables
     @accordion_hashes = @@accordion_hashes
     @accordion_labels = @@accordion_labels
     erb :index
   end
 
-  post '/select' do
-    puts 'selection submitted'
-    redirect to '/'
+  get '/category/:selected_category_index' do
+    ApplicationController.set_accordion_variables
+    @accordion_hashes = @@accordion_hashes
+    @accordion_labels = @@accordion_labels
+    @selected_category_index = params[:selected_category_index].to_i
+    erb :index
   end
 
-  def self.setup_class_variables
-    return if !@@accordion_hashes.nil?
+  post '/select/:selected_category_index' do
+    redirect to "/category/#{params[:selected_category_index]}"
+  end
 
-    # @@authors_hash = Author.all_by_name
+  def self.set_accordion_variables
+    return if !@@accordion_hashes.nil?
 
     @@accordion_hashes = Array.new
     @@accordion_classes.each{ |category_subclass|
@@ -49,5 +54,4 @@ class ApplicationController < Sinatra::Base
       @@accordion_hashes.push(accordion_hash)
     }
   end
-
 end
