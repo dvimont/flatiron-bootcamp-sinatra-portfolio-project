@@ -1,22 +1,30 @@
-<h2 class='centered'>Welcome to Librivox Explorer WEB</h2>
-<h3 class='centered'>Select a category below to begin exploring the Librivox Catalog!</h3><br><br>
+<h2 class='centered'>Select a category below to begin exploring the Librivox Catalog!</h2><br><br>
 <% (0..(ACCORDION_HASHES.size - 1)).each{ |i| %>
   <% if (@selected_category_index == i) %>
     <button class="accordion acc1"><%= ACCORDION_LABELS[i] %>S</button>
     <div class="panel" style="max-height:none">
     <% ACCORDION_HASHES[i].each{|accordion_label, category_object_array| %>
-      <button class="accordion acc2"><span class="letter-label"><%=accordion_label%></span>
-          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              [<%= category_object_array.size %> <%= ACCORDION_LABELS[i].downcase %>s]</span>
-      </button>
-      <div class="panel" >
-      <% category_object_array.each{|category_object| %>
-        <form method="post" action="/audiobooks/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
-          <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
-        </form>
-      <% } %>
-      </div>
+      <% if (accordion_label.start_with?(ACCORDION_BYPASS_LABEL)) %>
+        <% category_object_array.each{|category_object| %>
+          <form method="post" action="/audiobooks/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
+            <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
+          </form>
+        <% } %>
+      <% else # if-block for ACCORDION_BYPASS_LABEL %>
+        <button class="accordion acc2"><span class="letter-label"><%=accordion_label%></span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                [<%= category_object_array.size %> <%= ACCORDION_LABELS[i].downcase %>s]</span>
+        </button>
+        <div class="panel">
+        <% category_object_array.each{|category_object| %>
+          <form method="post" action="/audiobooks/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
+            <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
+          </form>
+        <% } %>
+        </div>
+      <% end # if-block for ACCORDION_BYPASS_LABEL %>
     <% } %>
     </div>
   <% else # all categories which are NOT selected are presented just as form/button! %>
