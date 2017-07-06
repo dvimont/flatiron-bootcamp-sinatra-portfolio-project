@@ -12,6 +12,8 @@ class ApplicationController < Sinatra::Base
 
   ACCORDION_LABELS = ["AUTHOR", "READER", "LIBRIVOX GENRE", "GUTENBERG GENRE", "LANGUAGE"]
   ACCORDION_CLASSES = [Author, Reader, GenreLibrivox, GenreGutenberg, Language]
+  ACCORDION_PNG_FILES = ["/images/author-sign.png", "/images/voice.png",
+    "/images/mask.png", "/images/gutenberg.png", "/images/grid-world.png"]
   ACCORDION_HASHES = Array.new
   DEFAULT_ERB = Array.new
   PRELOADED_ERB_ARRAY = Array.new

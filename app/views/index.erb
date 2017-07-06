@@ -1,7 +1,7 @@
 <h2 class='centered'>Select a category below to begin exploring the Librivox Catalog!</h2><br><br>
 <% (0..(ACCORDION_HASHES.size - 1)).each{ |i| %>
   <% if (@selected_category_index == i) %>
-    <button class="accordion acc1"><%= ACCORDION_LABELS[i] %>S</button>
+    <button class="accordion acc1"><span><img src='<%= ACCORDION_PNG_FILES[i] %>' height="24" width="24"></span>&nbsp;&nbsp;<%= ACCORDION_LABELS[i] %>S</button>
     <div class="panel" style="max-height:none">
     <% ACCORDION_HASHES[i].each{|accordion_label, category_object_array| %>
 
@@ -57,7 +57,7 @@
 
   <% else # all categories which are NOT selected are presented just as form/button! %>
     <form method="post" action="/select/<%= i %>">
-      <button class="accordion acc1"><%= ACCORDION_LABELS[i] %>S</button>
+      <button class="accordion acc1"><span><img src='<%= ACCORDION_PNG_FILES[i] %>' height="24" width="24"></span>&nbsp;&nbsp;<%= ACCORDION_LABELS[i] %>S</button>
     </form>
   <% end # end of 'if (@selected_index == i)'%>
 <% } %>
