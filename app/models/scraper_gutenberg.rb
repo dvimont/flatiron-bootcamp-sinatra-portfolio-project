@@ -24,7 +24,6 @@ class ScraperGutenberg
     def process_gutenberg_genres()
       Zlib::GzipReader.open(GUTENBERG_TAR_PATH) { |tgz|
         Archive::Tar::Minitar::Reader.open(tgz).each { |entry|
-        # Minitar::Input.open(GUTENBERG_TAR_PATH).each { |entry|
           gutenberg_id = entry.name[/\/\d+\//].delete("/")
           matched_audiobook = Audiobook.all_by_gutenberg_id[gutenberg_id]
           if matched_audiobook
@@ -33,7 +32,8 @@ class ScraperGutenberg
                 "rdf|RDF pgterms|ebook dcterms|subject rdf|Description rdf|value")
             gutenberg_subjects = Array.new
             subject_elements.each{|subject|
-              gutenberg_subjects.push(subject.text) if !subject.text[/^[A-Z][A-Z]?$/]
+              # exclude gutenberg subjects such as "D123" or "EB"!
+              gutenberg_subjects.push(subject.text) if !subject.text[/^[A-Z][A-Z]?$/] && !subject.text[/^[A-Z]\d{1,3}$/]
             }
             if !gutenberg_subjects.empty?
               matched_audiobook.gutenberg_subjects = gutenberg_subjects
@@ -43,5 +43,4 @@ class ScraperGutenberg
       }
     end
   end
-
 end

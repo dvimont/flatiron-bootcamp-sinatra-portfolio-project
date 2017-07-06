@@ -2,7 +2,7 @@
   <button class='go-back' onclick='goBack()'>&lt;&lt; GO BACK</button>
 </div>
 <div>
-  <h2 class='centered'>Audiobooks for <%= @category_object.class.to_s %>: <%= @category_object.to_s %></h2>
+  <h2 class='centered'>Audiobooks for <%= @category_object.class.to_s.upcase %> ===&gt;&gt;&gt; <%= @category_object.to_s %></h2>
   <ul style="list-style: none;">
     <% @category_object.audiobooks_by_title.values.each{ |audiobook| %>
       <li >

@@ -16,6 +16,7 @@ class ApplicationController < Sinatra::Base
   DEFAULT_ERB = Array.new
   PRELOADED_ERB_ARRAY = Array.new
   ACCORDION_BYPASS_LABEL = "**BYPASS**"
+  SUBGROUP_SIZE = 50
 
   get '/' do
     self.set_preloaded_erb_array
@@ -43,17 +44,30 @@ class ApplicationController < Sinatra::Base
     erb :category_instance_audiobooks
   end
 
+  def set_preloaded_erb_array()
+    return if !PRELOADED_ERB_ARRAY.empty?
+
+    self.set_accordion_variables
+    DEFAULT_ERB[0] = erb :index
+
+    (0..(ACCORDION_CLASSES.size - 1)).each{ |i|
+      @selected_category_index = i
+      PRELOADED_ERB_ARRAY.push(erb :index)
+    }
+  end
+
   def set_accordion_variables
     if ACCORDION_HASHES.empty?
       ACCORDION_CLASSES.each{ |category_subclass|
         accordion_hash = Hash.new
+        # No alphabetic grouping accordions for these category types
         if (category_subclass == GenreLibrivox || category_subclass == Language)
           category_object_array = category_subclass.all_by_name.values
           if (category_subclass == Language)
             category_object_array.delete_if { |language| language.id == "English" }
           end
           accordion_hash[ACCORDION_BYPASS_LABEL + category_subclass.to_s] = category_object_array
-        else
+        else # all other category types get alphabetic grouping and subalphabetic grouping
           ('A'..'[').to_a.each{ |letter|
             if letter == '['
               category_object_array = category_subclass.all_by_name.values_with_nonroman_key
@@ -70,17 +84,5 @@ class ApplicationController < Sinatra::Base
         ACCORDION_HASHES.push(accordion_hash)
       }
     end
-  end
-
-  def set_preloaded_erb_array()
-    return if !PRELOADED_ERB_ARRAY.empty?
-
-    self.set_accordion_variables
-    DEFAULT_ERB[0] = erb :index
-
-    (0..(ACCORDION_CLASSES.size - 1)).each{ |i|
-      @selected_category_index = i
-      PRELOADED_ERB_ARRAY.push(erb :index)
-    }
   end
 end
