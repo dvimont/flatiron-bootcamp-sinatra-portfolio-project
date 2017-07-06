@@ -9,14 +9,15 @@
         <div class='centered'>
           <hr/>
           <table class="image">
-            <tr><td align="left"><img src='<%= audiobook.url_cover_art %>' alt="Cover art" title="Cover art" height="144" width="144"></td></tr>
+            <tr><td align="left"><a href='<%= audiobook.url_librivox %>' target='_blank'>
+                <img src='<%= audiobook.url_cover_art %>' alt="Cover art" height="144" width="144"></a></td></tr>
             <tr><td class="caption" align="left">
               <% if (!audiobook.readers.nil? && audiobook.readers.size == 1) %>
                 <img src='/images/solo.png' alt="Solo work" title="Solo work" height="18" width="18">
               <% else %>
                 <img src='/images/group.png' alt="Group work" title="Group work" height="18" width="18">
               <% end %>
-              <a href='<%= audiobook.url_librivox %>' target='_blank' ><%= audiobook.title %></a>
+              <a href='<%= audiobook.url_librivox %>' target='_blank'><%= audiobook.title %></a>
                 -- by <%= audiobook.authors.nil? ? '???' : audiobook.authors.collect{|author| author.to_s }.join(', ') %>
             </td></tr>
           </table>
