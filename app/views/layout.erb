@@ -2,7 +2,7 @@
 <html>
   <style>
     body {background-color: aquamarine;}
-    h1 { display:inline-block; text-align: center; background-color: white; }
+    h1 { display:inline-block; text-align: center; background-color: aquamarine; }
     .centered { margin: auto; width: 70%; text-align: center; }
     .announce { text-align: center; border-style: dashed; border-width: 3px; border-color: red;}
 
@@ -44,12 +44,15 @@
    </style>
   <head>
     <title>Librivox Explorer</title>
+    <link rel="shortcut icon" href="/images/favicon.ico" />
   </head>
   <body>
     <header>
       <span>
-        <h1>CommonVox presents: LIBRIVOX EXPLORER</h1>
+        <h1><img src="/images/commonvox_logo.jpg" height="128" width="128">
+          <span>CommonVox presents: LIBRIVOX EXPLORER</span></h1>
       </span>
+      <hr><br><br>
     </header>
     <%= yield %>
     <script>
@@ -79,10 +82,13 @@
         <span>
           <h4><img src='/images/solo.png' alt="Solo icon" title="Solo icon" height="18" width="18">
             <img src='/images/group.png' alt="Group icon" title="Group icon" height="18" width="18">
+            <img src='/images/new.png' alt="New icon" title="New icon" height="18" width="18">
+            <img src='/images/title.png' alt="Title icon" title="Title icon" height="18" width="18">
             <img src='/images/author-sign.png' alt="Author icon" title="Author icon" height="18" width="18">
             <img src='/images/voice.png' alt="Reader icon" title="Reader icon" height="18" width="18">
             <img src='/images/mask.png' alt="Genre icon" title="Genre icon" height="18" width="18">
             <img src='/images/grid-world.png' alt="Language icon" title="Language icon" height="18" width="18">
+
             icons provided by <a href='http://www.freepik.com/' target='_blank'>Freepik</a>
               from <a href='http://www.flaticon.com/' target='_blank'>www.flaticon.com</a></h4>
         </span>

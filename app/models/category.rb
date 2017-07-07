@@ -65,22 +65,22 @@ module Category
     def add_audiobook(audiobook)
       if self.audiobooks[audiobook.id] == nil # this audiobook not yet "registered" here
         self.audiobooks[audiobook.id] = audiobook
-        title_key = audiobook.title
-        if title_key.upcase.start_with?("THE ")
-          title_key = title_key[4,title_key.length]
-        elsif title_key.upcase.start_with?("A ")
-          title_key = title_key[2,title_key.length]
-        elsif title_key.upcase.start_with?("AN ")
-          title_key = title_key[3,title_key.length]
-        end
-        self.audiobooks_by_title[title_key] = audiobook
+  #      title_key = audiobook.title
+  #      if title_key.upcase.start_with?("THE ")
+  #        title_key = title_key[4,title_key.length]
+  #      elsif title_key.upcase.start_with?("A ")
+  #        title_key = title_key[2,title_key.length]
+  #      elsif title_key.upcase.start_with?("AN ")
+  #        title_key = title_key[3,title_key.length]
+  #      end
+        self.audiobooks_by_title[audiobook.title_key] = audiobook
         self.audiobooks_by_date[audiobook.date_released] = audiobook
         if !audiobook.readers_hash.nil?
           if audiobook.readers_hash.size == 1
-            self.solo_works_by_title[title_key] = audiobook
+            self.solo_works_by_title[audiobook.title_key] = audiobook
             self.solo_works_by_date[audiobook.date_released] = audiobook
           elsif audiobook.readers_hash.size > 1
-            self.group_works_by_title[title_key] = audiobook
+            self.group_works_by_title[audiobook.title_key] = audiobook
             self.group_works_by_date[audiobook.date_released] = audiobook
           end
         end

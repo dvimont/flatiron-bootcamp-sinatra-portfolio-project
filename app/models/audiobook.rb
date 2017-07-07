@@ -1,6 +1,8 @@
 class Audiobook
   @@all = SortedSet.new
   @@works_in_progress = SortedSet.new
+  @@all_by_date = HashWithBsearch.new(:descending)
+  @@all_by_title = HashWithBsearch.new
   @@all_by_gutenberg_id = HashWithBsearch.new # used to build GenreGutenberg
   @@solo_works_by_date = HashWithBsearch.new(:descending) # newest solos
   @@group_works_by_date = HashWithBsearch.new(:descending) # newest group works
@@ -15,6 +17,18 @@ class Audiobook
 
   def self.all_by_gutenberg_id
     return @@all_by_gutenberg_id
+  end
+
+  def self.all_by_date
+    return @@all_by_date
+  end
+
+  def self.all_by_title
+    return @@all_by_title
+  end
+
+  def self.all_by_name # synonymous with #all_by_title
+    return @@all_by_title
   end
 
   def self.works_in_progress
@@ -37,7 +51,7 @@ class Audiobook
                 :language, :authors_hash, :readers_hash, :genres_csv_string,
                 :gutenberg_id, :gutenberg_subjects, :url_cover_art, :url_iarchive,
                 :http_error
-  attr_reader :language_object, :authors, :readers, :genres_librivox, :genres_gutenberg
+  attr_reader :language_object, :authors, :readers, :genres_librivox, :genres_gutenberg, :title_key
 
   def initialize(attributes)
     self.add_attributes(attributes)
@@ -70,6 +84,34 @@ class Audiobook
   end
 
   def build_category_objects
+    if !self.title.nil? && !self.title.empty?
+      # remove low-value (in Unicode terms) non-numeric & non-alpha characters, whether printable or not
+      @title_key = self.title.gsub(/./){|char|
+         char == ' ' || (char >= '0' && !(char > '9' && char < 'A')) ? char : ''
+      }
+      @title_key.strip!
+    #  @title_key = @title_key.gsub(/["']/, "")
+      if @title_key.upcase.start_with?("THE ")
+        @title_key = @title_key[4,@title_key.length]
+      elsif @title_key.upcase.start_with?("A ")
+        @title_key = @title_key[2,@title_key.length]
+      elsif @title_key.upcase.start_with?("AN ")
+        @title_key = @title_key[3,@title_key.length]
+      end
+      # artificially shove numeric-starting titles after alphabetic
+      if (@title_key.chars[0] < 'A')
+        @title_key = @title_key.insert(0,'{')
+      end
+      @title_key = @title_key.gsub(/\s/, '') # remove all whitespace chars
+    end
+
+    if !self.title_key.nil? && !self.title_key.empty?
+      @@all_by_title[self.title_key] = self
+      if !self.date_released.nil? && !self.date_released.empty?
+        @@all_by_date[self.date_released + self.title_key[0,10]] = self
+      end
+    end
+
     if !self.readers_hash.nil? && !self.readers_hash.empty?
       @readers = Reader.mass_initialize(self.readers_hash)
       @readers.each{|reader| reader.add_audiobook(self)}
@@ -94,28 +136,29 @@ class Audiobook
 
   def build_solo_group_hashes
     if !self.readers.nil? && self.readers.size == 1
-      @@solo_works_by_date[self.date_released + self.title[0,10]] = self
+      @@solo_works_by_date[self.date_released + self.title_key[0,10]] = self
     else
       if !self.date_released.nil? && !self.title.nil?
-        @@group_works_by_date[self.date_released + self.title[0,10]] = self
+        @@group_works_by_date[self.date_released + self.title_key[0,10]] = self
       end
     end
   end
 
   def to_s()
-    output_string = "\n" +
-        :id.to_s + ": " + self.id +
-        "\n  " + :url_librivox.to_s + ": " + self.url_librivox +
-        "\n  " + :title.to_s + ": " + self.title +
-        "\n  " + :authors_hash.to_s + ": " + self.authors_hash.to_s +
-#        "\n  " + :readers_hash.to_s + ": " + self.readers_hash.to_s +
-#        "\n  " + :language.to_s + ": " + self.language.to_s +
-#        "\n  " + :genres_csv_string.to_s + ": " + self.genres_csv_string +
-        "\n  " + :date_released.to_s + ": " + self.date_released
-    if self.http_error != nil
-      output_string += "\n  " + :http_error.to_s + ": " + self.http_error
-    end
-    return output_string
+#    output_string = "\n" +
+#        :id.to_s + ": " + self.id +
+#        "\n  " + :url_librivox.to_s + ": " + self.url_librivox +
+#        "\n  " + :title.to_s + ": " + self.title +
+#        "\n  " + :authors_hash.to_s + ": " + self.authors_hash.to_s +
+##       "\n  " + :readers_hash.to_s + ": " + self.readers_hash.to_s +
+##       "\n  " + :language.to_s + ": " + self.language.to_s +
+##       "\n  " + :genres_csv_string.to_s + ": " + self.genres_csv_string +
+#        "\n  " + :date_released.to_s + ": " + self.date_released
+#    if self.http_error != nil
+#      output_string += "\n  " + :http_error.to_s + ": " + self.http_error
+#    end
+#    return output_string
+    return self.title
   end
 
   def <=>(other)

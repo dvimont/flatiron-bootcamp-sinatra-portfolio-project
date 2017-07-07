@@ -1,4 +1,8 @@
 <h2 class='centered'>Select a category below to begin exploring the Librivox Catalog!</h2><br><br>
+<form method="post" action="/audiobooks/new">
+  <button class="accordion acc1"><span><img src='/images/new.png' height="24" width="24"></span>&nbsp;&nbsp;NEW</button>
+</form>
+
 <% (0..(ACCORDION_HASHES.size - 1)).each{ |i| %>
   <% if (@selected_category_index == i) %>
     <button class="accordion acc1"><span><img src='<%= ACCORDION_PNG_FILES[i] %>' height="24" width="24"></span>&nbsp;&nbsp;<%= ACCORDION_LABELS[i] %>S</button>
@@ -14,12 +18,13 @@
         <% } %>
 
       <% else # no ACCORDION_BYPASS_LABEL (alphabetic accordion groupings & subgroupings) %>
+
         <button class="accordion acc2"><span class="letter-label"><%=accordion_label%></span>
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 [<%= category_object_array.size %> <%= ACCORDION_LABELS[i].downcase %>s]</span>
         </button>
         <div class="panel">
-          <% if category_object_array.size <= SUBGROUP_SIZE %>
+          <% if category_object_array.size <= SUBGROUP_SIZE && ACCORDION_CLASSES[i] != Audiobook %>
             <% category_object_array.each{|category_object| %>
               <form method="post" action="/audiobooks/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
                 <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -33,19 +38,30 @@
             <% subgroup_count += 1 if category_object_array.size % SUBGROUP_SIZE > 0 %>
             <% (0..(subgroup_count - 1)).to_a.each{|subgroup_index| %>
               <% subgroup_array = category_object_array[(subgroup_index * SUBGROUP_SIZE)..(((subgroup_index + 1) * SUBGROUP_SIZE) - 1)]%>
-                <button class="accordion acc3">
-                  <span><%=subgroup_array.first.to_s%></span>
-                  <span>&nbsp;&nbsp;&nbsp;-- THROUGH --&nbsp;&nbsp;&nbsp;</span>
-                  <span><%=subgroup_array.last.to_s%></span>
-                </button>
-                <div class="panel">
-                  <% subgroup_array.each{|category_object| %>
-                    <form method="post" action="/audiobooks/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
-                      <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
-                    </form>
-                  <% } %>
-                </div>
+                <% if (ACCORDION_CLASSES[i] == Audiobook) %>
+                  <form method="post"
+                      action="/audiobooks/title/<%= Audiobook.all_by_title.getIndex(subgroup_array.first.title_key) %>/<%= Audiobook.all_by_title.getIndex(subgroup_array.last.title_key) %>">
+                    <button class="accordion acc3">
+                      <span><%=subgroup_array.first.title%></span>
+                      <span>&nbsp;&nbsp;&nbsp;-- THROUGH --&nbsp;&nbsp;&nbsp;</span>
+                      <span><%=subgroup_array.last.title%></span>
+                    </button>
+                  </form>
+                <% else %>
+                  <button class="accordion acc3">
+                    <span><%=subgroup_array.first.to_s%></span>
+                    <span>&nbsp;&nbsp;&nbsp;-- THROUGH --&nbsp;&nbsp;&nbsp;</span>
+                    <span><%=subgroup_array.last.to_s%></span>
+                  </button>
+                  <div class="panel">
+                    <% subgroup_array.each{|category_object| %>
+                      <form method="post" action="/audiobooks/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
+                        <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
+                      </form>
+                    <% } %>
+                  </div>
+                <% end %>
             <% } %>
 
           <% end %>

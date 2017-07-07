@@ -5,5 +5,5 @@ warmup do |app|
 end
 
 # use Rack::MethodOverride
-use Rack::Deflater
+use Rack::Deflater # automatically use gzip compression for all http responses
 run ApplicationController

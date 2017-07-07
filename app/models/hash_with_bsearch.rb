@@ -54,6 +54,19 @@ class HashWithBsearch
     return @sorted_hash.select &block
   end
 
+  def getIndex(key)
+    rebuild_sorted_hash
+    if @sorted_key_value_array.empty?
+      return nil
+    else
+      if @sort_option == :descending
+        return @sorted_key_value_array.bsearch_index{|kv_pair| kv_pair[0] <=> key}
+      else
+        return @sorted_key_value_array.bsearch_index{|kv_pair| key <=> kv_pair[0]}
+      end
+    end
+  end
+
   # Intended to provide O(log n) efficiency when searching for an ordered
   #  subset of items that match the submitted <key_prefix> argument.
   # EXAMPLE: authors_keyed_by_name.values_with_key_prefix("M") would return an
@@ -93,12 +106,12 @@ class HashWithBsearch
 
   def keys
     rebuild_sorted_hash
-    return @sorted_hash.keys
+    return @sorted_key_value_array.collect{|kv_pair| kv_pair[0]}
   end
 
   def values
     rebuild_sorted_hash
-    return @sorted_hash.values
+    return @sorted_key_value_array.collect{|kv_pair| kv_pair[1]}
   end
 
   # SETTER METHODS -- additional methods may need to be added!

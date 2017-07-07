@@ -10,9 +10,9 @@ class ApplicationController < Sinatra::Base
     # set :session_secret, "sooper-dooper-secret-930022"
   end
 
-  ACCORDION_LABELS = ["AUTHOR", "READER", "LIBRIVOX GENRE", "GUTENBERG GENRE", "LANGUAGE"]
-  ACCORDION_CLASSES = [Author, Reader, GenreLibrivox, GenreGutenberg, Language]
-  ACCORDION_PNG_FILES = ["/images/author-sign.png", "/images/voice.png",
+  ACCORDION_LABELS = ["TITLE", "AUTHOR", "READER", "LIBRIVOX GENRE", "GUTENBERG GENRE", "LANGUAGE"]
+  ACCORDION_CLASSES = [Audiobook, Author, Reader, GenreLibrivox, GenreGutenberg, Language]
+  ACCORDION_PNG_FILES = ["/images/title.png", "/images/author-sign.png", "/images/voice.png",
     "/images/mask.png", "/images/gutenberg.png", "/images/grid-world.png"]
   ACCORDION_HASHES = Array.new
   DEFAULT_ERB = Array.new
@@ -34,6 +34,38 @@ class ApplicationController < Sinatra::Base
     return PRELOADED_ERB_ARRAY[params[:selected_category_index].to_i]
   end
 
+  post '/audiobooks/new' do
+    redirect to "/audiobooks/new"
+  end
+
+  get '/audiobooks/new' do
+    @heading = "NEW Audiobooks"
+    @audiobook_array = Audiobook.all_by_date.values[0..50]
+    erb :category_instance_audiobooks
+  end
+
+  post '/audiobooks/title/:start_index/:end_index' do
+    redirect to "/audiobooks/title/#{params[:start_index]}/#{params[:end_index]}"
+  end
+
+  get '/audiobooks/title/:start_index/:end_index' do
+    firstTitle = Audiobook.all_by_title.values[params[:start_index].to_i].title
+    lastTitle = Audiobook.all_by_title.values[params[:end_index].to_i].title
+    if (firstTitle.length > 20)
+      firstTitle = firstTitle[0,17] + "..."
+    end
+    if (lastTitle.length > 20)
+      lastTitle = lastTitle[0,17] + "..."
+    end
+    @heading = "Audiobooks by Title: from '" +
+        firstTitle +
+         "'&nbsp;&nbsp;&nbsp;-- THROUGH --&nbsp;&nbsp;&nbsp;'" +
+        lastTitle + "'"
+    @audiobook_array =
+      Audiobook.all_by_title.values[params[:start_index].to_i..params[:end_index].to_i]
+    erb :category_instance_audiobooks
+  end
+
   post '/audiobooks/:category_type/:object_id' do
     redirect to "/audiobooks/#{params[:category_type]}/#{params[:object_id]}"
   end
@@ -42,13 +74,14 @@ class ApplicationController < Sinatra::Base
     category_class = ACCORDION_CLASSES.select{|klass|
       params[:category_type] == klass.to_s.downcase
     }.first
-    @category_object = category_class.get(params[:object_id])
+    category_object = category_class.get(params[:object_id])
+    @heading = "Audiobooks for #{category_object.class.to_s.upcase} ===&gt;&gt;&gt; #{category_object.to_s}"
+    @audiobook_array = category_object.audiobooks_by_title.values
     erb :category_instance_audiobooks
   end
 
   def set_preloaded_erb_array()
     return if !PRELOADED_ERB_ARRAY.empty?
-
     self.set_accordion_variables
     DEFAULT_ERB[0] = erb :index
 
@@ -73,7 +106,7 @@ class ApplicationController < Sinatra::Base
           ('A'..'[').to_a.each{ |letter|
             if letter == '['
               category_object_array = category_subclass.all_by_name.values_with_nonroman_key
-              letter_label = "NAMES NOT IN ROMAN ALPHABET"
+              letter_label = "ENTRIES NOT IN ROMAN ALPHABET"
             else
               category_object_array = category_subclass.all_by_name.values_with_key_prefix(letter)
               letter_label = letter
