@@ -109,13 +109,6 @@ class CatalogBuilder
     puts "****** FULL BUILD OF CATALOG OF #{Audiobook.all.size.to_s} AUDIOBOOKS COMPLETED IN #{build_timer.how_long?} " +
         "****** #{self.current_time}"
 
-#    i = 0
-#    File.open('title_keys.txt', 'w') { |file|
-#      Audiobook.all_by_title.keys.each{|key|
-#        file.write(i.to_s + " " + key + "\n")
-#        i += 1
-#      }
-#    }
     return :successful_build
   end
 

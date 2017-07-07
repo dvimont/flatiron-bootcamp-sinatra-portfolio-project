@@ -19,6 +19,7 @@ class ApplicationController < Sinatra::Base
   PRELOADED_ERB_ARRAY = Array.new
   ACCORDION_BYPASS_LABEL = "**BYPASS**"
   SUBGROUP_SIZE = 50
+  ALL_AUDIOBOOKS_ARRAY = Audiobook.all_by_title.values
 
   get '/' do
     self.set_preloaded_erb_array
@@ -77,6 +78,16 @@ class ApplicationController < Sinatra::Base
     category_object = category_class.get(params[:object_id])
     @heading = "Audiobooks for #{category_object.class.to_s.upcase} ===&gt;&gt;&gt; #{category_object.to_s}"
     @audiobook_array = category_object.audiobooks_by_title.values
+    erb :category_instance_audiobooks
+  end
+
+  post '/audiobooks/random' do
+    redirect to "/audiobooks/random"
+  end
+
+  get '/audiobooks/random' do
+    @heading = "Random Browsing of the Librivox Collection!"
+    @audiobook_array = Audiobook.all_by_date.values.sample(30)
     erb :category_instance_audiobooks
   end
 
