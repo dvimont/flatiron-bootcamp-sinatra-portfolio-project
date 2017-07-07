@@ -107,11 +107,12 @@ class ApplicationController < Sinatra::Base
       ACCORDION_CLASSES.each{ |category_subclass|
         accordion_hash = Hash.new
         # No alphabetic grouping accordions for these category types
-        if (category_subclass == GenreLibrivox || category_subclass == Language)
+        if (category_subclass == Language)
+        ## if (category_subclass == GenreLibrivox || category_subclass == Language)
           category_object_array = category_subclass.all_by_name.values
-          if (category_subclass == Language)
+          ##if (category_subclass == Language)
             category_object_array.delete_if { |language| language.id == "English" }
-          end
+          ##end
           accordion_hash[ACCORDION_BYPASS_LABEL + category_subclass.to_s] = category_object_array
         else # all other category types get alphabetic grouping and subalphabetic grouping
           ('A'..'[').to_a.each{ |letter|
