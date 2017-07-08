@@ -10,6 +10,9 @@ gem 'tux'
 # gem 'rack-flash3'
 gem 'rubyzip'
 gem 'minitar'
+gem 'nokogiri'
+# gem 'open-uri'
+gem 'json'
 
 group :test do
   gem 'rspec'
