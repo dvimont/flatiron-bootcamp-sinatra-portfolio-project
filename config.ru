@@ -1,7 +1,7 @@
 require './config/environment'
 
 warmup do |app|
-  CatalogBuilder.build # (50)
+  CatalogBuilder.build(525)
 end
 
 # use Rack::MethodOverride
