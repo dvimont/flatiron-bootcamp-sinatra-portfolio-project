@@ -58,6 +58,20 @@ class ApplicationController < Sinatra::Base
     erb :category_instance_audiobooks
   end
 
+  post '/audiobooks/random' do
+    redirect to "/audiobooks/random"
+  end
+
+  get '/audiobooks/random' do
+    self.set_preloaded_erb_array
+    if !@@initialization_complete
+      return erb :initializing_notice
+    end
+    @heading = "Random Browsing of the Librivox Collection!"
+    @audiobook_array = Audiobook.all_by_date.values.sample(30)
+    erb :category_instance_audiobooks
+  end
+
   post '/audiobooks/title/:start_index/:end_index' do
     redirect to "/audiobooks/title/#{params[:start_index]}/#{params[:end_index]}"
   end
@@ -99,20 +113,6 @@ class ApplicationController < Sinatra::Base
     category_object = category_class.get(params[:object_id])
     @heading = "Audiobooks for #{category_object.class.to_s.upcase} ===&gt;&gt;&gt; #{category_object.to_s}"
     @audiobook_array = category_object.audiobooks_by_title.values
-    erb :category_instance_audiobooks
-  end
-
-  post '/audiobooks/random' do
-    redirect to "/audiobooks/random"
-  end
-
-  get '/audiobooks/random' do
-    self.set_preloaded_erb_array
-    if !@@initialization_complete
-      return erb :initializing_notice
-    end
-    @heading = "Random Browsing of the Librivox Collection!"
-    @audiobook_array = Audiobook.all_by_date.values.sample(30)
     erb :category_instance_audiobooks
   end
 
