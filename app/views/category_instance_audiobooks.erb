@@ -1,15 +1,18 @@
 <div class='fixed'> <!-- go back button needs to be fixed in upper left corner, as part of header -->
   <button class='go-back' onclick='goBack()'>&lt;&lt; GO BACK</button>
 </div>
-<div>
-  <h2 class='centered'><%= @heading %></h2>
-  <ul style="list-style: none;">
-    <% @audiobook_array.each{ |audiobook| %>
-      <li >
-        <div class='centered'>
-          <hr/>
+<h3 class='centered'><%= @heading %></h3>
+<% i = 0 %>
+<% @audiobook_array.each{ |audiobook| %>
+  <% if (i % 6 == 0) %>
+    <div class="row"><div class="col-sm-12">
+        <span class="visible-lg-inline visible-md-inline"><hr></span>
+    </div></div>
+    <div class="row">
+  <% end %>
+      <div class="col-sm-2">
           <table class="image">
-            <tr><td align="left"><a href='<%= audiobook.url_librivox %>' target='_blank'>
+            <tr><td align="center"><a href='<%= audiobook.url_librivox %>' target='_blank'>
                 <img src='<%= audiobook.url_cover_art %>' alt="Cover art" height="144" width="144"></a></td></tr>
             <tr><td class="caption" align="left">
               <% if (!audiobook.readers.nil? && audiobook.readers.size == 1) %>
@@ -17,12 +20,21 @@
               <% else %>
                 <img src='/images/group.png' alt="Group work" title="Group work" height="18" width="18">
               <% end %>
+              <% if audiobook.authors.nil? %>
+                <% authorsDisplay = '???' %>
+              <% elsif audiobook.authors.size < 3 %>
+                <% authorsDisplay = audiobook.authors.collect{|author| author.to_s }.join(', ')  %>
+              <% else %>
+                <% authorsDisplay = audiobook.authors[0,2].collect{|author| author.to_s }.join(', ') + ', and others'%>
+              <% end %>
               <a href='<%= audiobook.url_librivox %>' target='_blank'><%= audiobook.title %></a>
-                -- by <%= audiobook.authors.nil? ? '???' : audiobook.authors.collect{|author| author.to_s }.join(', ') %>
+                -- by <%= authorsDisplay %>
             </td></tr>
+            <tr><td><span class="hidden-lg hidden-md"><hr></span></td></tr>
           </table>
-        </div>
-      </li>
-    <% } %>
-  </ul>
-</div>
+      </div>
+  <% if (i % 6 == 5 || i == @audiobook_array.size - 1) %>
+    </div>
+  <% end %>
+  <% i += 1 %>
+<% } %>

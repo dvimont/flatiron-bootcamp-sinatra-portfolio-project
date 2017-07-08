@@ -18,7 +18,7 @@ class ApplicationController < Sinatra::Base
   DEFAULT_ERB = Array.new
   PRELOADED_ERB_ARRAY = Array.new
   ACCORDION_BYPASS_LABEL = "**BYPASS**"
-  SUBGROUP_SIZE = 50
+  SUBGROUP_SIZE = 48
   ALL_AUDIOBOOKS_ARRAY = Audiobook.all_by_title.values
 
   get '/' do
@@ -41,7 +41,7 @@ class ApplicationController < Sinatra::Base
 
   get '/audiobooks/new' do
     @heading = "NEW Audiobooks"
-    @audiobook_array = Audiobook.all_by_date.values[0..50]
+    @audiobook_array = Audiobook.all_by_date.values[0..(SUBGROUP_SIZE - 1)]
     erb :category_instance_audiobooks
   end
 

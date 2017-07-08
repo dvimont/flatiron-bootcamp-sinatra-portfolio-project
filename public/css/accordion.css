@@ -1,0 +1,15 @@
+button.accordion { background-color: #eee; color: #444; cursor: pointer; outline: none;
+  transition: 0.4s; width: 100%; border: none;  margin: 2px 0px; }
+button.go-back {
+    background-color: #008CBA; border: none; color: white; padding: 8px 16px;
+    text-align: center; text-decoration: none; display: inline-block;
+    font-size: 14px; font-weight: bold; margin: 4px 14px; cursor: pointer;
+    position: absolute; left: 5px; top: 10px;
+}
+button.accordion.active, button.accordion:hover { background-color: #ddd; }
+button.acc1 { padding: 18px; font-size: 24px; text-align: center; }
+button.acc2 { padding: 14px; font-size: 14px; text-align: left; }
+button.acc3 { padding: 10px; font-size: 12px; text-align: left; }
+div.panel { padding: 0 18px; background-color: aquamarine; max-height: 0;
+    overflow: hidden; transition: max-height 0.2s ease-out; }
+.letter-label { font-size:140%; font-weight:bold; }

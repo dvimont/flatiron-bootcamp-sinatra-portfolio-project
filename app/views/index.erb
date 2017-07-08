@@ -1,14 +1,19 @@
-<h2 class='centered'>Select a category below to begin exploring the Librivox Catalog!</h2><br><br>
-<form method="post" action="/audiobooks/new">
-  <button class="accordion acc1"><span><img src='/images/new.png' height="24" width="24"></span>&nbsp;&nbsp;NEW</button>
-</form>
+<div class="row">
+  <h3>Select a category below to begin exploring the Librivox Catalog!</h3>
+  <hr>
+</div>
+<div class="row">
+  <form method="post" action="/audiobooks/new">
+    <button class="accordion acc1"><span><img src='/images/new.png' height="24" width="24"></span>&nbsp;&nbsp;NEW</button>
+  </form>
+</div>
 
 <% (0..(ACCORDION_HASHES.size - 1)).each{ |i| %>
   <% if (@selected_category_index == i) %>
+  <div class="row">
     <button class="accordion acc1"><span><img src='<%= ACCORDION_PNG_FILES[i] %>' height="24" width="24"></span>&nbsp;&nbsp;<%= ACCORDION_LABELS[i] %>S</button>
     <div class="panel" style="max-height:none">
     <% ACCORDION_HASHES[i].each{|accordion_label, category_object_array| %>
-
       <% if (accordion_label.start_with?(ACCORDION_BYPASS_LABEL)) %>
         <% category_object_array.each{|category_object| %>
           <form method="post" action="/audiobooks/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
@@ -16,9 +21,7 @@
                 [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
           </form>
         <% } %>
-
       <% else # no ACCORDION_BYPASS_LABEL (alphabetic accordion groupings & subgroupings) %>
-
         <button class="accordion acc2"><span class="letter-label"><%=accordion_label%></span>
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 [<%= category_object_array.size %> <%= ACCORDION_LABELS[i].downcase %>s]</span>
@@ -32,7 +35,6 @@
               </form>
             <% } %>
           <% else # category_object_array.size > SUBGROUP_SIZE %>
-
             <% # create subgroup accordions for subgroupings of size == SUBGROUP_SIZE %>
             <% subgroup_count = category_object_array.size / SUBGROUP_SIZE %>
             <% subgroup_count += 1 if category_object_array.size % SUBGROUP_SIZE > 0 %>
@@ -63,21 +65,22 @@
                   </div>
                 <% end %>
             <% } %>
-
           <% end %>
         </div>
       <% end # if-else-block for ACCORDION_BYPASS_LABEL %>
-
     <% } %>
     </div>
-
+  </div>
   <% else # all categories which are NOT selected are presented just as form/button! %>
+  <div class="row">
     <form method="post" action="/select/<%= i %>">
       <button class="accordion acc1"><span><img src='<%= ACCORDION_PNG_FILES[i] %>' height="24" width="24"></span>&nbsp;&nbsp;<%= ACCORDION_LABELS[i] %>S</button>
     </form>
+  </div>
   <% end # end of 'if (@selected_index == i)'%>
 <% } %>
-
-<form method="post" action="/audiobooks/random">
-  <button class="accordion acc1"><span><img src='/images/dice.png' height="24" width="24"></span>&nbsp;&nbsp;RANDOM (be daring!)</button>
-</form>
+<div class="row">
+  <form method="post" action="/audiobooks/random">
+    <button class="accordion acc1"><span><img src='/images/dice.png' height="24" width="24"></span>&nbsp;&nbsp;RANDOM (be daring!)</button>
+  </form>
+</div>

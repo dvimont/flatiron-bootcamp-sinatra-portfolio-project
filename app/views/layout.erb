@@ -1,47 +1,5 @@
 <!DOCTYPE html>
 <html>
-  <style>
-    body {background-color: aquamarine;}
-    h1 { display:inline-block; text-align: center; background-color: aquamarine; }
-    .centered { margin: auto; width: 70%; text-align: center; }
-    .announce { text-align: center; border-style: dashed; border-width: 3px; border-color: red;}
-
-    button.accordion { background-color: #eee; color: #444; cursor: pointer; outline: none;
-      transition: 0.4s; width: 100%; border: none;  margin: 2px 0px; }
-    button.go-back {
-        background-color: #008CBA; border: none; color: white; padding: 15px 32px;
-        text-align: center; text-decoration: none; display: inline-block;
-        font-size: 16px; font-weight: bold; margin: 4px 16px; cursor: pointer;
-    }
-    button.accordion.active, button.accordion:hover { background-color: #ddd; }
-    button.acc1 { padding: 18px; font-size: 24px; text-align: center; }
-    button.acc2 { padding: 14px; font-size: 14px; text-align: left; }
-    button.acc3 { padding: 10px; font-size: 12px; text-align: left; }
-    div.panel { padding: 0 18px; background-color: aquamarine; max-height: 0; overflow: hidden;
-        transition: max-height 0.2s ease-out; }
-    .letter-label { font-size:140%; font-weight:bold; }
-
-    /* following experimental classes need revision or removal */
-    .fixed { position: fixed; }
-    .sidebar {
-        position: fixed;
-        width: 200px;
-        height: 100px;
-    }
-    .content {
-        margin-left: 50px;
-        min-height: 400px;
-        width: auto;
-        position: relative;
-        overflow: auto;
-        z-index: 1;
-    }
-    .info {
-        width: auto; /* 1440px; */
-        height: auto; /* 300px; */
-        position: relative;
-    }
-   </style>
   <head>
     <!-- BEGIN BOOTSTRAP template -->
     <meta charset="utf-8">
@@ -50,7 +8,11 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/accordion.css" rel="stylesheet">
+    <style>
+      body {background-color: aquamarine;}
+    </style>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -64,22 +26,28 @@
 
   </head>
   <body>
-
-    <!-- BEGIN BOOTSTRAP template -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- END BOOTSTRAMP template -->
-
     <header>
-      <span>
-        <h1><img src="/images/commonvox_logo.jpg" height="128" width="128">
-          <span>CommonVox presents: LIBRIVOX EXPLORER</span></h1>
-      </span>
-      <hr><br><br>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+          <h2>
+            <span class="visible-lg-inline-block visible-md-inline-block">
+              <img src="/images/commonvox_logo.jpg" height="96" width="96">
+            </span>
+            <span class="hidden-lg hidden-md">
+              <img src="/images/commonvox_logo.jpg" height="128" width="128">
+            </span>
+            <span class="visible-lg-inline-block">CommonVox presents:</span>
+            <span class="visible-lg-inline-block visible-md-inline-block">LIBRIVOX EXPLORER</span>
+          </h2>
+          </div>
+        </div>
+      </div>
+      <hr>
     </header>
-    <%= yield %>
+    <div class="container">
+      <%= yield %>
+    </div>
     <script>
       toggleAccordion(document.getElementsByClassName("accordion"));
       function toggleAccordion(acc) {
@@ -102,23 +70,33 @@
       }
     </script>
     <footer>
-      <div class='centered'>
-        <br><hr/>
-        <span>
-          <h4><img src='/images/solo.png' alt="Solo icon" title="Solo icon" height="18" width="18">
-            <img src='/images/group.png' alt="Group icon" title="Group icon" height="18" width="18">
-            <img src='/images/new.png' alt="New icon" title="New icon" height="18" width="18">
-            <img src='/images/title.png' alt="Title icon" title="Title icon" height="18" width="18">
-            <img src='/images/author-sign.png' alt="Author icon" title="Author icon" height="18" width="18">
-            <img src='/images/voice.png' alt="Reader icon" title="Reader icon" height="18" width="18">
-            <img src='/images/mask.png' alt="Genre icon" title="Genre icon" height="18" width="18">
-            <img src='/images/grid-world.png' alt="Language icon" title="Language icon" height="18" width="18">
-            <img src='/images/dice.png' alt="Random icon" title="Random icon" height="18" width="18">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+            <hr/>
+              <h4><img src='/images/solo.png' alt="Solo icon" title="Solo icon" height="18" width="18">
+                <img src='/images/group.png' alt="Group icon" title="Group icon" height="18" width="18">
+                <img src='/images/new.png' alt="New icon" title="New icon" height="18" width="18">
+                <img src='/images/title.png' alt="Title icon" title="Title icon" height="18" width="18">
+                <img src='/images/author-sign.png' alt="Author icon" title="Author icon" height="18" width="18">
+                <img src='/images/voice.png' alt="Reader icon" title="Reader icon" height="18" width="18">
+                <img src='/images/mask.png' alt="Genre icon" title="Genre icon" height="18" width="18">
+                <img src='/images/grid-world.png' alt="Language icon" title="Language icon" height="18" width="18">
+                <img src='/images/dice.png' alt="Random icon" title="Random icon" height="18" width="18">
 
-            icons provided by <a href='http://www.freepik.com/' target='_blank'>Freepik</a>
-              from <a href='http://www.flaticon.com/' target='_blank'>www.flaticon.com</a></h4>
-        </span>
+                icons provided by <a href='http://www.freepik.com/' target='_blank'>Freepik</a>
+                  from <a href='http://www.flaticon.com/' target='_blank'>www.flaticon.com</a></h4>
+          </div>
+        </div>
       </div>
     </footer>
+
+    <!-- BEGIN BOOTSTRAP template -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- END BOOTSTRAMP template -->
+
   </body>
 </html>
