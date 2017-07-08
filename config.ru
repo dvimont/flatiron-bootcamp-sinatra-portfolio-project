@@ -1,6 +1,6 @@
 require './config/environment'
 
-# HEROKU timeouts forced move of CatalogBuilder.build invocation to ApplicationController#configure
+# HEROKU timeouts forced move of CatalogBuilder.build invocation to ApplicationController
 #warmup do |app|
 #  CatalogBuilder.build(525)
 #end

@@ -8,9 +8,11 @@ class ApplicationController < Sinatra::Base
     # NOTE: not (initially) using sessions with this application, so commenting out the following
     # enable :sessions
     # set :session_secret, "sooper-dooper-secret-930022"
-    CatalogBuilder.build
+    # CatalogBuilder.build
   end
 
+  @@initialization_complete = false
+  @@initialization_started = false
   ACCORDION_LABELS = ["TITLE", "AUTHOR", "READER", "LIBRIVOX GENRE", "GUTENBERG GENRE", "LANGUAGE"]
   ACCORDION_CLASSES = [Audiobook, Author, Reader, GenreLibrivox, GenreGutenberg, Language]
   ACCORDION_PNG_FILES = ["/images/title.png", "/images/author-sign.png", "/images/voice.png",
@@ -24,6 +26,9 @@ class ApplicationController < Sinatra::Base
 
   get '/' do
     self.set_preloaded_erb_array
+    if !@@initialization_complete
+      return erb :initializing_notice
+    end
     return DEFAULT_ERB[0]
   end
 
@@ -33,6 +38,9 @@ class ApplicationController < Sinatra::Base
 
   get '/category/:selected_category_index' do
     self.set_preloaded_erb_array
+    if !@@initialization_complete
+      return erb :initializing_notice
+    end
     return PRELOADED_ERB_ARRAY[params[:selected_category_index].to_i]
   end
 
@@ -41,6 +49,10 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/audiobooks/new' do
+    self.set_preloaded_erb_array
+    if !@@initialization_complete
+      return erb :initializing_notice
+    end
     @heading = "NEW Audiobooks"
     @audiobook_array = Audiobook.all_by_date.values[0..(SUBGROUP_SIZE - 1)]
     erb :category_instance_audiobooks
@@ -51,6 +63,10 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/audiobooks/title/:start_index/:end_index' do
+    self.set_preloaded_erb_array
+    if !@@initialization_complete
+      return erb :initializing_notice
+    end
     firstTitle = Audiobook.all_by_title.values[params[:start_index].to_i].title
     lastTitle = Audiobook.all_by_title.values[params[:end_index].to_i].title
     if (firstTitle.length > 20)
@@ -73,6 +89,10 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/audiobooks/:category_type/:object_id' do
+    self.set_preloaded_erb_array
+    if !@@initialization_complete
+      return erb :initializing_notice
+    end
     category_class = ACCORDION_CLASSES.select{|klass|
       params[:category_type] == klass.to_s.downcase
     }.first
@@ -87,6 +107,10 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/audiobooks/random' do
+    self.set_preloaded_erb_array
+    if !@@initialization_complete
+      return erb :initializing_notice
+    end
     @heading = "Random Browsing of the Librivox Collection!"
     @audiobook_array = Audiobook.all_by_date.values.sample(30)
     erb :category_instance_audiobooks
@@ -94,6 +118,16 @@ class ApplicationController < Sinatra::Base
 
   def set_preloaded_erb_array()
     return if !PRELOADED_ERB_ARRAY.empty?
+    if !@@initialization_complete
+      if !@@initialization_started
+        @@initialization_started = true
+        Thread.new {
+            CatalogBuilder.build
+            @@initialization_complete = true
+        }
+      end
+      return
+    end
     self.set_accordion_variables
     DEFAULT_ERB[0] = erb :index
 
