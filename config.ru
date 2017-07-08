@@ -1,8 +1,9 @@
 require './config/environment'
 
-warmup do |app|
-  CatalogBuilder.build(525)
-end
+# HEROKU timeouts forced move of CatalogBuilder.build invocation to ApplicationController#configure
+#warmup do |app|
+#  CatalogBuilder.build(525)
+#end
 
 # use Rack::MethodOverride
 use Rack::Deflater # automatically use gzip compression for all http responses

@@ -8,6 +8,7 @@ class ApplicationController < Sinatra::Base
     # NOTE: not (initially) using sessions with this application, so commenting out the following
     # enable :sessions
     # set :session_secret, "sooper-dooper-secret-930022"
+    CatalogBuilder.build
   end
 
   ACCORDION_LABELS = ["TITLE", "AUTHOR", "READER", "LIBRIVOX GENRE", "GUTENBERG GENRE", "LANGUAGE"]
