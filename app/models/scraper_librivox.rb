@@ -34,7 +34,7 @@ class ScraperLibrivox
         title_genre_section = book_page_section.css("div.content-wrap")
         title_element = title_genre_section.css("h1")[0]
         if title_element
-          attributes[:title] = title_genre_section.css("h1")[0].text.sti
+          attributes[:title] = title_genre_section.css("h1")[0].text.strip
         else
           puts "  -- no title found for audiobook at url: " + url_librivox
           attributes[:title] = "NO TITLE: " + url_librivox
