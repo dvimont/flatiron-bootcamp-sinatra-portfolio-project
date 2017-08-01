@@ -6,7 +6,7 @@ class CatalogBuilder
 
   LIBRIVOX_API_URL = "https://librivox.org/api/feed/audiobooks/"
   LIBRIVOX_API_PARMS = "?fields={id,url_librivox,language}&format=json"
-  DEFAULT_CATALOG_SIZE = 12000
+  DEFAULT_CATALOG_SIZE = 15000
   LIMIT_PER_CALL = 50
   LOCAL_API_RESPONSE_URI_PREFIX = "./public/api_responses/"
   # NOTE: It is intentional that there is no special processing option to force a
@@ -103,8 +103,13 @@ class CatalogBuilder
     end
 
     self.scrape_webpages
-    self.build_category_objects
-    self.build_solo_group_hashes # must come after Reader category objects instantiated
+    if @@special_processing == :remote_api_calls
+      self.refetch_pages_with_missing_cover_art
+    else
+      # self.refetch_pages_with_missing_cover_art
+      self.build_category_objects
+      self.build_solo_group_hashes # must come after Reader category objects instantiated
+    end
 
     puts "****** FULL BUILD OF CATALOG OF #{Audiobook.all.size.to_s} AUDIOBOOKS COMPLETED IN #{build_timer.how_long?} " +
         "****** #{self.current_time}"
@@ -140,6 +145,22 @@ class CatalogBuilder
     scrape_timer = Timer.new
     ScraperGutenberg.process_gutenberg_genres
     puts "***    Scraping of Gutenberg repository completed in: #{scrape_timer.how_long?}"
+  end
+
+  def self.refetch_pages_with_missing_cover_art
+    puts "*** Starting refetch for missing cover art"
+    Audiobook.all.each{ |audiobook|
+      if !audiobook.url_cover_art.nil?
+        if audiobook.url_cover_art.include?("book-cover-150x150.gif")
+          puts "     -- retrieve and persist for REFETCH: #{audiobook.title}"
+          ScraperLibrivox.retrieve_and_persist_http_response(audiobook.url_librivox, true)
+        end
+      end
+    #  if (audiobook.url_cover_art.nil? || audiobook.url_cover_art.include?("book-cover-150x150.gif"))
+    #    puts "This audiobook has no cover art: #{audiobook.title}"
+    #  end
+    }
+    puts "***    Refetch for missing cover art completed"
   end
 
   def self.build_category_objects

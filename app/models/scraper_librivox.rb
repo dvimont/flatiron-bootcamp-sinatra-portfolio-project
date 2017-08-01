@@ -17,7 +17,7 @@ class ScraperLibrivox
           url_librivox = "https" + url_librivox[4,url_librivox.length]
         end
         if special_processing != :local_uri_calls
-          retrieve_and_persist_http_response(url_librivox)
+          retrieve_and_persist_http_response(url_librivox, false)
         end
 
         page_content = get_local_page_content(url_librivox)
@@ -118,11 +118,17 @@ class ScraperLibrivox
       return contributors_hash
     end
 
-    def retrieve_and_persist_http_response(url)
+    def retrieve_and_persist_http_response(url, refetch)
+      if url.nil?
+        return
+      end
+      if url.start_with?("http:")
+        url = "https" + url[4,url.length]
+      end
       local_file_metadata = get_local_file_metadata(url)
 
       # if webpage already stored locally, nothing need be done
-      if File.file?(local_file_metadata[0])
+      if (!refetch && File.file?(local_file_metadata[0]))
         return
       end
       # assure no "redirect" is occurring with librivox page (works in progress often redirect)
