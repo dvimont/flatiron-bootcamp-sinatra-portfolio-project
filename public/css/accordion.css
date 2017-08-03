@@ -11,6 +11,6 @@ button.acc1 { padding: 18px; font-size: 24px; text-align: center; }
 button.acc2 { padding: 14px; font-size: 14px; text-align: left; }
 button.acc3 { padding: 10px; font-size: 12px; text-align: left; }
 div.panel { padding: 0 18px; background-color: aquamarine; max-height: 0;
-    overflow: hidden; transition: max-height 0.2s ease-out; }
+overflow: hidden; transition: max-height 0.2s ease-out; margin-bottom: 0; }
 .letter-label { font-size:140%; font-weight:bold; }
 a { color: darkblue }
