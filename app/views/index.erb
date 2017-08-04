@@ -17,7 +17,7 @@
     <% ACCORDION_HASHES[i].each{|accordion_label, category_object_array| %>
       <% if (accordion_label.start_with?(ACCORDION_BYPASS_LABEL)) %>
         <% category_object_array.each{|category_object| %>
-          <form method="post" action="/audiobooks/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
+          <form method="post" action="/audiobookset/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
             <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
           </form>
@@ -30,7 +30,7 @@
         <div class="panel">
           <% if category_object_array.size <= SUBGROUP_SIZE && ACCORDION_CLASSES[i] != Audiobook %>
             <% category_object_array.each{|category_object| %>
-              <form method="post" action="/audiobooks/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
+              <form method="post" action="/audiobookset/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
                 <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
               </form>
@@ -58,7 +58,7 @@
                   </button>
                   <div class="panel">
                     <% subgroup_array.each{|category_object| %>
-                      <form method="post" action="/audiobooks/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
+                      <form method="post" action="/audiobookset/<%= ACCORDION_CLASSES[i].to_s.downcase %>/<%= category_object.id %>">
                         <button class="accordion acc3"><%= category_object.to_s %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [<%= category_object.audiobooks.size %> audiobook<%= 's' if category_object.audiobooks.size > 1 %>]</button>
                       </form>

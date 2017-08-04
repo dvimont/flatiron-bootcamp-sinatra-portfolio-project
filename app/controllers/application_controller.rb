@@ -98,11 +98,11 @@ class ApplicationController < Sinatra::Base
     erb :category_instance_audiobooks
   end
 
-  post '/audiobooks/:category_type/:object_id' do
-    redirect to "/audiobooks/#{params[:category_type]}/#{params[:object_id]}"
+  post '/audiobookset/:category_type/:object_id' do
+    redirect to "/audiobookset/#{params[:category_type]}/#{params[:object_id]}"
   end
 
-  get '/audiobooks/:category_type/:object_id' do
+  get '/audiobookset/:category_type/:object_id' do
     self.set_preloaded_erb_array
     if !@@initialization_complete
       return erb :initializing_notice
