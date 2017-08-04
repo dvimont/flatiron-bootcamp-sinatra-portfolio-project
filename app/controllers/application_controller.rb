@@ -13,10 +13,10 @@ class ApplicationController < Sinatra::Base
 
   @@initialization_complete = false
   @@initialization_started = false
-  ACCORDION_LABELS = ["TITLE", "AUTHOR", "READER", "LIBRIVOX GENRE", "GUTENBERG GENRE", "LANGUAGE"]
-  ACCORDION_CLASSES = [Audiobook, Author, Reader, GenreLibrivox, GenreGutenberg, Language]
+  ACCORDION_LABELS = ["TITLE", "AUTHOR", "READER", "LANGUAGE", "LIBRIVOX GENRE", "GUTENBERG GENRE"]
+  ACCORDION_CLASSES = [Audiobook, Author, Reader, Language, GenreLibrivox, GenreGutenberg]
   ACCORDION_PNG_FILES = ["/images/title.png", "/images/author-sign.png", "/images/voice.png",
-    "/images/mask.png", "/images/gutenberg.png", "/images/grid-world.png"]
+    "/images/grid-world.png", "/images/mask.png", "/images/gutenberg.png"]
   ACCORDION_HASHES = Array.new
   DEFAULT_ERB = Array.new
   PRELOADED_ERB_ARRAY = Array.new

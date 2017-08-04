@@ -7,9 +7,9 @@ button.go-back {
     position: absolute; left: 5px; top: 10px;
 }
 button.accordion.active, button.accordion:hover { background-color: #ddd; }
-button.acc1 { padding: 18px; font-size: 24px; text-align: center; }
-button.acc2 { padding: 14px; font-size: 14px; text-align: left; }
-button.acc3 { padding: 10px; font-size: 12px; text-align: left; }
+button.acc1 { padding: 12px; font-size: 24px; text-align: center; }
+button.acc2 { padding: 10px; font-size: 14px; text-align: left; }
+button.acc3 { padding: 8px; font-size: 12px; text-align: left; }
 div.panel { padding: 0 18px; background-color: aquamarine; max-height: 0;
 overflow: hidden; transition: max-height 0.2s ease-out; margin-bottom: 0; }
 .letter-label { font-size:140%; font-weight:bold; }
