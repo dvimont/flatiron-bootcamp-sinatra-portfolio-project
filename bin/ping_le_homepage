@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require_relative '../config/environment'
+require 'nokogiri'
+
+# ping Librivox Explorer homepage to force startup
+open("https://libexp.herokuapp.com/", {:read_timeout=>nil, :redirect=>false}) { |uri|
+  puts "Completed pinging of Librivox Explorer homepage"
+}
